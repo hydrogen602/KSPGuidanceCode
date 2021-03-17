@@ -51,6 +51,8 @@ class HopperMK1(Vehicle):
             self.vessel.auto_pilot.target_pitch_and_heading(90, 90)
             # actiavte SAS
             self.vessel.auto_pilot.engage()
+            # self.vessel.auto_pilot.sas = True
+            # print(self.vessel.auto_pilot.sas)
             # 100% throttle
             self.vessel.control.throttle = 1
             # nap
@@ -68,7 +70,7 @@ class HopperMK1(Vehicle):
                 self.phaseOfFlight = Phase.DESCENT
         
         elif self.phaseOfFlight == Phase.DESCENT:
-            suicideBurnHeight = self.suicideBurnHeight(vertical_vel)
+            suicideBurnHeight = self.suicideBurnHeight(vertical_vel) + 15
             #print(suicideBurnHeight, altitude)
             if vertical_vel < 0 and suicideBurnHeight >= altitude:
                 self.vessel.control.throttle = 1
@@ -78,9 +80,10 @@ class HopperMK1(Vehicle):
         
         elif self.phaseOfFlight == Phase.SUICIDE_BURN:
 
-            if altitude < 5:
+            if altitude < 3:
                 self.vessel.control.throttle = 0
                 print('Landed')
+                print(f'vel = {vertical_vel}, alt = {altitude}')
                 self.phaseOfFlight = Phase.LANDED
         
         elif self.phaseOfFlight == Phase.LANDED:
