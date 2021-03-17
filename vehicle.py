@@ -69,10 +69,11 @@ class HopperMK1(Vehicle):
         
         elif self.phaseOfFlight == Phase.DESCENT:
             suicideBurnHeight = self.suicideBurnHeight(vertical_vel)
-
-            if suicideBurnHeight <= altitude:
+            #print(suicideBurnHeight, altitude)
+            if vertical_vel < 0 and suicideBurnHeight >= altitude:
                 self.vessel.control.throttle = 1
                 print('Suicide burn time')
+                print(suicideBurnHeight, altitude)
                 self.phaseOfFlight = Phase.SUICIDE_BURN
         
         elif self.phaseOfFlight == Phase.SUICIDE_BURN:
