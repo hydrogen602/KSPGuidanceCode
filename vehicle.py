@@ -12,6 +12,7 @@ class Vehicle:
     def __init__(self, vessel: Any) -> None:
         self.mass: float = vessel.mass
         self.thrust: float = vessel.max_thrust
+        self.vessel: Any = vessel
         print(f'mass = {self.mass}, thrust = {self.thrust}')
         # F = ma
         # F/m = a
@@ -21,6 +22,8 @@ class Vehicle:
     def suicideBurnHeight(self, vel: float) -> float:
         return 3/2 * self.mass * vel * vel / (self.thrust * self.throttle_for_calculation - self.mass * -9.8)
 
+    def update(self):
+        self.mass = self.vessel.mass
 
 class Phase(Enum):
     PRE_LAUNCH = 0
@@ -37,7 +40,6 @@ class HopperMK1(Vehicle):
 
         self.surface_flight_info = vessel.flight(vessel.orbit.body.reference_frame)
         self.flight_info = vessel.flight()
-        self.vessel = vessel
 
         self.__altitude: Callable[[], float] = conn.add_stream(getattr, self.flight_info, 'surface_altitude')
         self.__verticalVel: Callable[[], float] = conn.add_stream(getattr, self.surface_flight_info, 'vertical_speed')
@@ -49,6 +51,7 @@ class HopperMK1(Vehicle):
         self.shutoffHeight: float = 50
     
     def update(self):
+        super().update()
         altitude = self.__altitude()
         vertical_vel = self.__verticalVel()
 
@@ -88,9 +91,11 @@ class HopperMK1(Vehicle):
         
         elif self.phaseOfFlight == Phase.SUICIDE_BURN:
             suicideBurnHeight = self.suicideBurnHeight(vertical_vel)
-            print('\r', suicideBurnHeight, altitude, end='')
+            print('\r', suicideBurnHeight, altitude, self.mass, end='')
             if suicideBurnHeight > altitude:
                 self.vessel.control.throttle = 1
+            elif suicideBurnHeight < altitude - 50:
+                self.vessel.control.throttle = self.throttle_for_calculation / 2
             else:
                 self.vessel.control.throttle = self.throttle_for_calculation
 
