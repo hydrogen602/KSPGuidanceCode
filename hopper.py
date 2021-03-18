@@ -9,7 +9,6 @@ vessel.control.activate_next_stage()
 
 conn.space_center.quicksave()
 
-
 # [50, 100, 200, 400]
 # [400, 700]
 for h in [50, 100, 200, 400, 800, 1600, 3200, 6400]:

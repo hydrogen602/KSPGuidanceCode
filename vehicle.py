@@ -1,4 +1,3 @@
-
 from enum import Enum
 import time
 from typing import Any, Callable
@@ -49,7 +48,7 @@ class HopperMK1(Vehicle):
         self.__apogee: float = 0
 
         self.shutoffHeight: float = 50
-    
+
     def update(self):
         super().update()
         altitude = self.__altitude()
@@ -72,14 +71,14 @@ class HopperMK1(Vehicle):
 
             print('Launch!')
             self.phaseOfFlight = Phase.ASCENT
-        
+
         elif self.phaseOfFlight == Phase.ASCENT:
 
             if altitude > self.shutoffHeight:
                 print('Altitude Reached')
                 self.vessel.control.throttle = 0
                 self.phaseOfFlight = Phase.DESCENT
-        
+
         elif self.phaseOfFlight == Phase.DESCENT:
             suicideBurnHeight = self.suicideBurnHeight(vertical_vel) + 15
             #print(suicideBurnHeight, altitude)
@@ -88,7 +87,7 @@ class HopperMK1(Vehicle):
                 print('Suicide burn time')
                 print(suicideBurnHeight, altitude)
                 self.phaseOfFlight = Phase.SUICIDE_BURN
-        
+
         elif self.phaseOfFlight == Phase.SUICIDE_BURN:
             suicideBurnHeight = self.suicideBurnHeight(vertical_vel)
             print('\r', suicideBurnHeight, altitude, self.mass, end='')
@@ -105,18 +104,13 @@ class HopperMK1(Vehicle):
                 print('Landed')
                 print(f'vel = {vertical_vel}, alt = {altitude}')
                 self.phaseOfFlight = Phase.LANDED
-        
+
         elif self.phaseOfFlight == Phase.LANDED:
             print(f'Apogee = {self.__apogee}')
             return False
 
         return True
-        
-    
-
-    
-    
 
 
-if __name__ == '__main__':
-    craft = Vehicle(3750, 15_172, 4)
+
+
