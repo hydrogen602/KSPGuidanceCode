@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="com.google.protobuf:protobuf-java:3.12.4" type="repository">
+    <properties maven-id="com.google.protobuf:protobuf-java:3.12.4" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/protobuf/protobuf-java/3.12.4/protobuf-java-3.12.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
