@@ -1,5 +1,7 @@
 package com.fournoobs;
 
+import java.io.IOException;
+
 import krpc.client.Connection;
 import krpc.client.RPCException;
 import krpc.client.Stream;
@@ -28,7 +30,9 @@ public class HopperMK1 extends Vehicle {
 
     private double apogee = 0;
 
-    public HopperMK1(Vessel v, Connection con) throws RPCException {
+    private DataCollection out;
+
+    public HopperMK1(Vessel v, Connection con) throws RPCException, IOException {
         super(v);
         Flight surfaceFlightInfo = v.flight(v.getOrbit().getBody().getReferenceFrame());
         Flight flightInfo = v.flight(v.getReferenceFrame());
@@ -40,6 +44,8 @@ public class HopperMK1 extends Vehicle {
             e.printStackTrace();
         }
 
+        out = new DataCollection("flight.json");
+
         phase = Phase.PRE_LAUNCH;
     }
 
@@ -50,11 +56,13 @@ public class HopperMK1 extends Vehicle {
 //    }
 
     @Override
-    public boolean update() throws RPCException, StreamException {
+    public boolean update() throws RPCException, StreamException, IOException {
         super.update();
 
         double altitude = altitudeStream.get();
         double vertical_vel = verticalVelStream.get();
+
+        out.addEntry(altitude, vertical_vel);
 
         if (altitude > apogee) {
             apogee = altitude;
@@ -98,7 +106,7 @@ public class HopperMK1 extends Vehicle {
             case SUICIDE_BURN:
                 sBurnHeight = suicideBurnHeight(vertical_vel);
                 System.out.print("\r" + sBurnHeight + " " + altitude + " " + mass);
-                if (sBurnHeight > altitude) {
+                if (sBurnHeight + 5 > altitude) {
                     vessel.getControl().setThrottle(1);
                 }
                 else if (sBurnHeight < altitude - 50) {
@@ -119,6 +127,7 @@ public class HopperMK1 extends Vehicle {
 
             case LANDED:
                 System.out.println("Apogee = " + apogee);
+                out.close();
                 return false;
         }
 

@@ -1,5 +1,9 @@
 package com.fournoobs;
 
+import java.io.IOException;
+
+import krpc.client.RPCException;
+import krpc.client.StreamException;
 
 public class Main {
 
@@ -11,24 +15,39 @@ public class Main {
         try {
             Connecting c = new Connecting("Suborbital Hop", "localhost", 50000, 50001);
             c.getVessel().getControl().activateNextStage();
-            c.getSpaceCenter().quicksave();
-
-            for (int h: heights) {
-                c.getSpaceCenter().quickload();
-                HopperMK1 mk1 = new HopperMK1(c.getVessel(), c.getConn());
-                mk1.shutoffHeight = h;
-                System.out.println("Aiming for " + h);
-
-                while (mk1.update()) {}
-
-                Thread.sleep(5000);
-            }
-
+            
+            oneHop(c);
 
         }
         catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("Done");
+    }
 
+    public static void oneHop(Connecting conn) throws RPCException, IOException, StreamException {
+        HopperMK1 mk1 = new HopperMK1(conn.getVessel(), conn.getConn());
+        while (mk1.update()) {}
+    }
+
+    public static void hopCampaign(Connecting conn) throws RPCException, IOException, StreamException {
+        conn.getSpaceCenter().quicksave();
+
+        for (int h: heights) {
+            conn.getSpaceCenter().quickload();
+            HopperMK1 mk1;
+                mk1 = new HopperMK1(conn.getVessel(), conn.getConn());
+            
+            mk1.shutoffHeight = h;
+            System.out.println("Aiming for " + h);
+
+            while (mk1.update()) {}
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

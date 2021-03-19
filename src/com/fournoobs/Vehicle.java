@@ -1,5 +1,7 @@
 package com.fournoobs;
 
+import java.io.IOException;
+
 import krpc.client.RPCException;
 import krpc.client.StreamException;
 import krpc.client.services.SpaceCenter.Vessel;
@@ -17,14 +19,14 @@ public class Vehicle {
         thrust = v.getMaxThrust();
         vessel = v;
         System.out.println("Vehicle with mass=" + mass + " and thrust=" + thrust);
-        System.out.println(v.getName());
+        //System.out.println(v.getName());
     }
 
     public double suicideBurnHeight(double vel) {
         return 3.0/2.0 * mass * vel * vel / (thrust * Vehicle.throttle_for_calculation - mass * -9.8);
     }
 
-    public boolean update() throws RPCException, StreamException {
+    public boolean update() throws RPCException, StreamException, IOException {
         mass = vessel.getMass();
         return true;
     }
