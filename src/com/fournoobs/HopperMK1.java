@@ -34,8 +34,8 @@ public class HopperMK1 extends Vehicle {
         Flight flightInfo = v.flight(v.getReferenceFrame());
 
         try {
-            altitudeStream = con.addStream(v, "surface_altitude", flightInfo);
-            verticalVelStream = con.addStream(v, "vertical_speed", surfaceFlightInfo);
+            altitudeStream = con.addStream(flightInfo, "getSurfaceAltitude");
+            verticalVelStream = con.addStream(surfaceFlightInfo, "getVerticalSpeed");
         } catch (StreamException e) {
             e.printStackTrace();
         }
@@ -96,7 +96,7 @@ public class HopperMK1 extends Vehicle {
                 break;
 
             case SUICIDE_BURN:
-                sBurnHeight = suicideBurnHeight(vertical_vel) + 15;
+                sBurnHeight = suicideBurnHeight(vertical_vel);
                 System.out.print("\r" + sBurnHeight + " " + altitude + " " + mass);
                 if (sBurnHeight > altitude) {
                     vessel.getControl().setThrottle(1);

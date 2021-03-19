@@ -1,5 +1,6 @@
 package com.fournoobs;
 
+
 public class Main {
 
     private static final int[] heights = {50, 100, 200, 400, 800};

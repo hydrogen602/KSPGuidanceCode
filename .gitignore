@@ -3,3 +3,8 @@ krpc_guidance/.settings/
 krpc_guidance/target/
 krpc_guidance/lib/krpc-java-0.4.8.jar
 out/
+bin/
+
+.classpath
+.project
+
