@@ -55,9 +55,8 @@ public class HopperMK1 extends Vehicle {
 //        }
 //    }
 
-    @Override
     public boolean update() throws RPCException, StreamException, IOException {
-        super.update();
+        dataUpdate();
 
         double altitude = altitudeStream.get();
         double vertical_vel = verticalVelStream.get();
