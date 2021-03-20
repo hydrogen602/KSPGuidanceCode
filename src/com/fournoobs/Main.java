@@ -26,17 +26,17 @@ public class Main {
     }
 
     public static void oneHop(Connecting conn) throws RPCException, IOException, StreamException {
-        HopperMK1 mk1 = new HopperMK1(conn.getVessel(), conn.getConn());
+        Launchable mk1 = new HopperMK1(conn.getVessel(), conn.getConn());
         while (mk1.update()) {}
     }
 
     public static void hopCampaign(Connecting conn) throws RPCException, IOException, StreamException {
         conn.getSpaceCenter().quicksave();
 
+        HopperMK1 mk1;
         for (int h: heights) {
             conn.getSpaceCenter().quickload();
-            HopperMK1 mk1;
-                mk1 = new HopperMK1(conn.getVessel(), conn.getConn());
+            mk1 = new HopperMK1(conn.getVessel(), conn.getConn());
             
             mk1.shutoffHeight = h;
             System.out.println("Aiming for " + h);

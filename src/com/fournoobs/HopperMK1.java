@@ -19,7 +19,7 @@ enum Phase {
 }
 
 
-public class HopperMK1 extends Vehicle {
+public class HopperMK1 extends Vehicle implements Launchable {
 
     private Stream<Double> altitudeStream;
     private Stream<Double> verticalVelStream;
