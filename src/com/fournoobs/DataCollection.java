@@ -23,7 +23,13 @@ public class DataCollection {
         startTime = System.currentTimeMillis();
     }
 
-    public void addEntry(double a, double b) throws IOException {
+    public DataCollection(String filename, String header) throws IOException {
+        this(filename);
+        writer.write("  \"" + header + "\"");
+        firstEntry = false;
+    }
+
+    public void addEntry(double ... a) throws IOException {
         long curTime = System.currentTimeMillis();
         if (curTime - lastEntry < pause) {
             return;
@@ -36,7 +42,12 @@ public class DataCollection {
         else {
             writer.write(",\n");
         }
-        writer.write("  [" + (curTime - startTime) + ", " + a + ", " + b + "]");
+
+        String[] s = new String[a.length];
+        for (int i = 0; i < a.length; ++i) {
+            s[i] = a[i] + "";
+        }
+        writer.write("  [" + (curTime - startTime) + ", " + String.join(", ", s) + "]");
     }
 
     public void close() {

@@ -4,27 +4,11 @@ import java.io.IOException;
 
 import krpc.client.Connection;
 import krpc.client.RPCException;
-import krpc.client.Stream;
 import krpc.client.StreamException;
 import krpc.client.services.SpaceCenter.Vessel;
-import krpc.client.services.SpaceCenter.Flight;
 
 
-enum Phase {
-    PRE_LAUNCH,
-    ASCENT,
-    DESCENT,
-    SUICIDE_BURN,
-    LANDED
-}
-
-
-public class HopperMK1 extends Vehicle implements Launchable {
-
-    private Stream<Double> altitudeStream;
-    private Stream<Double> verticalVelStream;
-
-    private Phase phase;
+public class HopperMK1 extends FlightVehicle implements Launchable {
 
     public double shutoffHeight = 50;
 
@@ -33,20 +17,9 @@ public class HopperMK1 extends Vehicle implements Launchable {
     private DataCollection out;
 
     public HopperMK1(Vessel v, Connection con) throws RPCException, IOException {
-        super(v);
-        Flight surfaceFlightInfo = v.flight(v.getOrbit().getBody().getReferenceFrame());
-        Flight flightInfo = v.flight(v.getReferenceFrame());
-
-        try {
-            altitudeStream = con.addStream(flightInfo, "getSurfaceAltitude");
-            verticalVelStream = con.addStream(surfaceFlightInfo, "getVerticalSpeed");
-        } catch (StreamException e) {
-            e.printStackTrace();
-        }
+        super(v, con);
 
         out = new DataCollection("flight.json");
-
-        phase = Phase.PRE_LAUNCH;
     }
 
 //    public void run() throws RPCException, StreamException {

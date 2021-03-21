@@ -26,7 +26,8 @@ public class Main {
     }
 
     public static void oneHop(Connecting conn) throws RPCException, IOException, StreamException {
-        Launchable mk1 = new HopperMK1(conn.getVessel(), conn.getConn());
+        Launchable mk1 = new DragTest(conn.getVessel(), conn.getConn());
+        //new HopperMK1(conn.getVessel(), conn.getConn());
         while (mk1.update()) {}
     }
 
